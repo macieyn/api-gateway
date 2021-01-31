@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  cars:
+    build: cars/
+    command: flask run
+    ports: 
+      - "5002:5000"
+    volumes: 
+      - ./cars/app:/app
+  books:
+    build: books/
+    command: flask run
+    ports: 
+      - "5001:5000"
+    volumes: 
+      - ./books/app:/app
+  gateway:
+    build: api-gateway/
+    command: flask run
+    ports: 
+      - "5000:5000"
+    volumes: 
+      - ./api-gateway/app:/app
+    environment: 
+      - CARS_HOST=cars
+      - BOOKS_HOST=books
