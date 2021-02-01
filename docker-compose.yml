@@ -1,21 +1,32 @@
 version: '3.9'
 
+networks:
+  net:
+
 services:
   cars:
+    networks:
+      net:
+        aliases:
+          - cars
     build: cars/
+    container_name: cars
     command: flask run
-    ports: 
-      - "5002:5000"
     volumes: 
       - ./cars/app:/app
   books:
+    networks:
+      net:
+        aliases:
+          - books
     build: books/
+    container_name: books
     command: flask run
-    ports: 
-      - "5001:5000"
     volumes: 
       - ./books/app:/app
   gateway:
+    networks:
+      - net
     build: api-gateway/
     command: flask run
     ports: 
@@ -23,5 +34,11 @@ services:
     volumes: 
       - ./api-gateway/app:/app
     environment: 
+      - CARS_NAME=cars
       - CARS_HOST=cars
+      - CARS_PORT=5000
+      - CARS_INFO=info
+      - BOOKS_NAME=books
       - BOOKS_HOST=books
+      - BOOKS_PORT=5000
+      - BOOKS_INFO=info
