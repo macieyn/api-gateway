@@ -19,7 +19,7 @@ collection = [
 
 @app.route('/info')
 def hello_service():
-    return jsonify({'name': 'cars'})
+    return jsonify({'name': 'books'})
 
 
 @app.route('/api', methods=('GET', 'POST'))
