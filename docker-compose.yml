@@ -4,6 +4,7 @@ networks:
   net:
 
 services:
+  # Flask Microservice
   cars:
     networks:
       net:
@@ -14,6 +15,7 @@ services:
     command: flask run
     volumes: 
       - ./cars/app:/app
+  # Flask Microservice
   books:
     networks:
       net:
@@ -24,6 +26,17 @@ services:
     command: flask run
     volumes: 
       - ./books/app:/app
+  # PHP Microservice
+  articles:
+    networks:
+      net:
+        aliases:
+          - articles
+    build: articles/
+    container_name: articles
+    volumes:
+      - ./articles/app:/var/www/html
+  # Flas Gateway
   gateway:
     networks:
       - net

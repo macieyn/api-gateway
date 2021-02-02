@@ -12,6 +12,7 @@ app = Flask(__name__)
 services = {
     'books': Service(os.getenv('BOOKS_NAME'), os.getenv('BOOKS_HOST'), os.getenv('BOOKS_PORT'), os.getenv('BOOKS_INFO')),
     'cars': Service(os.getenv('CARS_NAME'), os.getenv('CARS_HOST'), os.getenv('CARS_PORT'), os.getenv('CARS_INFO')),
+    'articles': Service('articles', 'articles', '80', 'info'),
     'fake': Service('fake', 'fake', '5000', 'fake'),
 }
 
