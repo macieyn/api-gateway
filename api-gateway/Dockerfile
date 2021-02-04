@@ -7,3 +7,5 @@ RUN pip install --upgrade pip \
     && pip install pipenv
 RUN pipenv install --system --deploy --ignore-pipfile
 EXPOSE 5000
+RUN flask init-db
+

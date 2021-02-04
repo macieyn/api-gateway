@@ -1,6 +1,11 @@
+import os
 import requests
 from requests.exceptions import ConnectionError
 import json
+from flask import Blueprint, request
+from flask import current_app as app
+
+from app.auth import login_required
 
 class Service:
     
@@ -39,3 +44,37 @@ class Service:
             return json.loads(response.text)
         except ConnectionError:
             raise
+
+
+services = {
+    'books': Service('books', 'books', '5000', 'info'),
+    'cars': Service('cars', 'cars', '5000', 'info'),
+    'articles': Service('articles', 'articles', '80', 'info'),
+    'fake': Service('fake', 'fake', '5000', 'fake'),
+}
+
+
+bp = Blueprint('services', __name__, url_prefix='/services')
+
+
+@bp.route('/')
+def services_info():
+    data = { 'services': [] }
+    for service in services.values():
+        try:
+            response = service.info()
+            data['services'].append(response)
+        except ConnectionError:
+            pass
+    return data, 200
+
+
+@bp.route('/<string:service>/<path:path>', methods=('GET', 'POST'))
+@login_required
+def call_service(service, path):
+    if request.method == 'GET':
+        data = services[service].get(path)
+        return data, 200
+    elif request.method == 'POST':
+        data, code = services[service].post(path, json=json.dumps(request.json))
+        return data, code
